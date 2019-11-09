@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: rutsky/cpp-test:11
+    steps:
+      - checkout # check out the code in the project directory
+      - run:
+          command: |
+            clang++-7 -O1 -g -fsanitize=address -fno-omit-frame-pointer -Wall -Wextra -Werror -std=c++17 -o bind_smoke_test bind_smoke_test.cpp
+            PATH=/usr/lib/llvm-7/bin/:$PATH ./bind_smoke_test
+      - run:
+          command: |
+            clang++-7 -O1 -g -fsanitize=address -fno-omit-frame-pointer -Wall -Wextra -Werror -std=c++17 -o function_smoke_test function_smoke_test.cpp
+            PATH=/usr/lib/llvm-7/bin/:$PATH ./function_smoke_test
